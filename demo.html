@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmbrAI - Embryo Analysis Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Mouse Tracking Overlay -->
+    <div class="mouse-tracking-overlay">
+        <div class="cursor-effect"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><h1><span class="embr">Embr</span><span class="ai">AI</span></h1></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#technology">Technology</a></li>
+                    <li><a href="index.html#benefits">Benefits</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="cta-button mobile-hidden">
+                <a href="index.html#contact" class="button">Contact Us</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section class="demo-hero">
+        <div class="parallax-bg">
+            <div class="parallax-circle circle1" data-speed="0.1"></div>
+            <div class="parallax-circle circle2" data-speed="0.05"></div>
+            <div class="dynamic-grid"></div>
+        </div>
+        
+        <div class="container">
+            <div class="section-header">
+                <h1>AI-Powered <span class="highlight">Embryo Analysis</span></h1>
+                <p>Upload an embryo image to see our AI in action. Experience how EmbrAI can enhance your embryo selection process with objective, data-driven assessments.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-upload">
+        <div class="container">
+            <div class="upload-container">
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content" id="uploadContent">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Upload Embryo Image</h3>
+                            <p>Drag and drop your image here or click to browse</p>
+                            <span class="file-info">Accepted formats: JPG, PNG, TIFF (Max 10MB)</span>
+                            <input type="file" id="fileUpload" accept="image/*" hidden>
+                            <button class="button primary" id="browseTrigger">Browse Files</button>
+                            <p class="sample-image-link">No embryo image? <a href="assets/sample-embryo.svg" download="sample-embryo.svg">Download a sample</a></p>
+                        </div>
+                        <div class="uploaded-image" id="uploadedImage">
+                            <img id="previewImage" src="" alt="Uploaded embryo image">
+                            <div class="image-overlay">
+                                <button class="button secondary" id="removeImage"><i class="fas fa-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="analyze-section">
+                    <button class="button primary analyze-btn" id="analyzeBtn">
+                        <span class="loading-spinner"></span>
+                        Analyze Embryo
+                    </button>
+                    <div class="analyze-info">
+                        <p><i class="fas fa-shield-alt"></i> Your image is processed locally and securely</p>
+                        <p><i class="fas fa-bolt"></i> Analysis typically takes 5-10 seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-results" id="resultsSection">
+        <div class="container">
+            <div class="section-header">
+                <h2>Analysis Results</h2>
+                <p>AI-powered assessment of embryo quality and implantation potential</p>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-image">
+                    <div class="image-with-overlay">
+                        <img id="analyzedImage" src="" alt="Analyzed embryo">
+                        <canvas id="annotationOverlay"></canvas>
+                    </div>
+                    <div class="heatmap-toggle">
+                        <span>AI Focus Areas:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="heatmapToggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="results-data">
+                    <div class="results-summary">
+                        <div class="quality-score">
+                            <div class="score-circle">
+                                <h3 id="qualityScore">A</h3>
+                            </div>
+                            <div class="score-text">
+                                <h4>Overall Quality</h4>
+                                <p>Gardner's Grading System</p>
+                            </div>
+                        </div>
+                        
+                        <div class="probability-bar">
+                            <h4>Implantation Probability: <span id="implantationProbability">68%</span></h4>
+                            <div class="progress-container">
+                                <div class="progress-bar" id="probabilityBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-details">
+                        <h3>Morphological Assessment</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <h4>Cell Number</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="cellNumberRating">9</span>
+                                    <span class="rating-label">cells</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="cellNumberBar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4>Symmetry</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="symmetryRating">4.8</span>
+                                    <span class="rating-label">/5</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="symmetryBar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4>Fragmentation</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="fragmentationRating">5%</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="fragmentationBar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4>Blastocyst Expansion</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="expansionRating">4</span>
+                                    <span class="rating-label">/6</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="expansionBar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4>Inner Cell Mass</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="icmRating">A</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="icmBar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4>Trophectoderm</h4>
+                                <div class="rating">
+                                    <span class="rating-value" id="trophectodermRating">B</span>
+                                </div>
+                                <div class="detail-progress">
+                                    <div class="progress-bar" id="trophectodermBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button primary" id="downloadReport">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                        <button class="button secondary" id="newAnalysis">
+                            <i class="fas fa-redo"></i> New Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How Does It Compare?</h2>
+                <p>See how EmbrAI's analysis compares to traditional manual grading</p>
+            </div>
+            
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Traditional Grading</th>
+                            <th>EmbrAI Analysis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Objectivity</td>
+                            <td>Subject to inter-observer variability</td>
+                            <td><i class="fas fa-check-circle highlight"></i> Consistent objective measurements</td>
+                        </tr>
+                        <tr>
+                            <td>Speed</td>
+                            <td>Minutes per embryo</td>
+                            <td><i class="fas fa-check-circle highlight"></i> Seconds per embryo</td>
+                        </tr>
+                        <tr>
+                            <td>Detail Level</td>
+                            <td>Basic morphological assessment</td>
+                            <td><i class="fas fa-check-circle highlight"></i> Detailed pixel-level analysis</td>
+                        </tr>
+                        <tr>
+                            <td>Data Integration</td>
+                            <td>Limited manual correlation</td>
+                            <td><i class="fas fa-check-circle highlight"></i> AI-powered pattern recognition</td>
+                        </tr>
+                        <tr>
+                            <td>Learning Capability</td>
+                            <td>Static criteria</td>
+                            <td><i class="fas fa-check-circle highlight"></i> Continuously improving model</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to transform your embryo selection process?</h2>
+                <p>Experience the power of AI-enhanced embryo assessment in your clinic.</p>
+                <a href="index.html#contact" class="button primary">
+                    <span class="loading-spinner"></span>
+                    Schedule a Full Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div id="particles-container"></div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2><span class="embr">Embr</span><span class="ai">AI</span></h2>
+                    <p>Enhancing embryo selection through AI and federated learning</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Company</h3>
+                        <ul>
+                            <li><a href="index.html#about">About</a></li>
+                            <li><a href="index.html#technology">Technology</a></li>
+                            <li><a href="index.html#benefits">Benefits</a></li>
+                            <li><a href="index.html#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Research</a></li>
+                            <li><a href="#">Case Studies</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">HIPAA Compliance</a></li>
+                            <li><a href="#">GDPR Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 EmbrAI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="animations.js"></script>
+    <script src="demo.js"></script>
+</body>
+</html> 

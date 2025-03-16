@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <!-- Background -->
+  <circle cx="250" cy="250" r="245" fill="#f9f9f9" stroke="#eaeaea" stroke-width="5"/>
+  
+  <!-- Outer cell layer (trophectoderm) -->
+  <circle cx="250" cy="250" r="210" fill="#f0f8ff" stroke="#82C3EC" stroke-width="3"/>
+  
+  <!-- Inner cell mass -->
+  <ellipse cx="310" cy="220" rx="60" ry="50" fill="#e1efff" stroke="#4B56D2" stroke-width="2"/>
+  
+  <!-- Blastocoel cavity -->
+  <path d="M150,200 C180,150 280,140 320,200 C380,280 300,350 220,330 C150,310 120,250 150,200" fill="#f5faff" stroke="#82C3EC" stroke-width="1" opacity="0.7"/>
+  
+  <!-- Cell structures and details -->
+  <!-- Cell boundaries -->
+  <path d="M280,170 C300,180 320,210 310,240" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M220,170 C240,160 270,170 290,190" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M170,210 C190,190 220,180 250,190" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M160,260 C170,230 200,210 230,220" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M180,310 C190,280 220,260 250,270" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M240,330 C260,310 290,300 320,310" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  <path d="M310,280 C330,270 340,240 330,210" fill="none" stroke="#82C3EC" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- Focal planes to simulate 3D depth -->
+  <circle cx="250" cy="250" r="190" fill="none" stroke="#4B56D2" stroke-width="0.5" opacity="0.3" stroke-dasharray="5,5"/>
+  <circle cx="250" cy="250" r="170" fill="none" stroke="#4B56D2" stroke-width="0.5" opacity="0.3" stroke-dasharray="5,5"/>
+  
+  <!-- Cell nuclei in the inner cell mass -->
+  <circle cx="300" cy="210" r="8" fill="#d0e0ff" stroke="#4B56D2" stroke-width="1"/>
+  <circle cx="320" cy="230" r="7" fill="#d0e0ff" stroke="#4B56D2" stroke-width="1"/>
+  <circle cx="290" cy="235" r="6" fill="#d0e0ff" stroke="#4B56D2" stroke-width="1"/>
+  <circle cx="315" cy="200" r="5" fill="#d0e0ff" stroke="#4B56D2" stroke-width="1"/>
+  <circle cx="335" cy="215" r="6" fill="#d0e0ff" stroke="#4B56D2" stroke-width="1"/>
+  
+  <!-- Trophectoderm cell nuclei -->
+  <circle cx="180" cy="190" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="210" cy="170" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="250" cy="160" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="290" cy="170" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="330" cy="190" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="350" cy="230" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="350" cy="270" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="330" cy="310" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="290" cy="340" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="250" cy="350" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="210" cy="340" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="170" cy="310" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="150" cy="270" r="6" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  <circle cx="150" cy="230" r="5" fill="#e8f4ff" stroke="#82C3EC" stroke-width="0.8"/>
+  
+  <!-- Small fragments to represent minor fragmentation -->
+  <circle cx="230" cy="220" r="3" fill="#d0e0ff" stroke="#4B56D2" stroke-width="0.5" opacity="0.7"/>
+  <circle cx="260" cy="250" r="2" fill="#d0e0ff" stroke="#4B56D2" stroke-width="0.5" opacity="0.7"/>
+  <circle cx="240" cy="290" r="2.5" fill="#d0e0ff" stroke="#4B56D2" stroke-width="0.5" opacity="0.7"/>
+  <circle cx="210" cy="260" r="2" fill="#d0e0ff" stroke="#4B56D2" stroke-width="0.5" opacity="0.7"/>
+  
+  <!-- Microscope edge effect -->
+  <circle cx="250" cy="250" r="240" fill="none" stroke="#ccc" stroke-width="10" opacity="0.2"/>
+  
+  <!-- Zone pellucida (transparent outer layer) -->
+  <circle cx="250" cy="250" r="225" fill="none" stroke="#eee" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Text label -->
+  <text x="250" y="440" text-anchor="middle" font-family="Arial" font-size="16" fill="#4B56D2">
+    Sample Blastocyst (Day 5) - Grade 4AB
+  </text>
+</svg> 
