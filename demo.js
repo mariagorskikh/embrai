@@ -26,14 +26,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const icmBar = document.getElementById('icmBar');
     const trophectodermBar = document.getElementById('trophectodermBar');
     
+    // AI Model elements
+    const loadModelBtn = document.getElementById('loadModelBtn');
+    const modelStatus = document.getElementById('modelStatus');
+    const aiPredictionContainer = document.getElementById('aiPredictionContainer');
+    const predictionStatus = document.getElementById('predictionStatus');
+    const predictionClass = document.getElementById('predictionClass');
+    const predictionConfidence = document.getElementById('predictionConfidence');
+    const allScoresContainer = document.getElementById('allScoresContainer');
+    
     let currentFile = null;
     let isAnalyzing = false;
+    let isModelLoaded = false;
     
     // Initialize the demo page
     function initDemo() {
         setupDragAndDrop();
         setupEventListeners();
         hideResults();
+        hideAiPrediction();
     }
     
     // Set up drag and drop functionality
@@ -62,6 +73,36 @@ document.addEventListener('DOMContentLoaded', function() {
         heatmapToggle.addEventListener('change', toggleHeatmap);
         downloadReportBtn.addEventListener('click', downloadReport);
         newAnalysisBtn.addEventListener('click', resetAnalysis);
+        
+        // AI Model loading
+        loadModelBtn.addEventListener('click', initializeModel);
+    }
+    
+    // Initialize the AI model
+    async function initializeModel() {
+        // Update UI
+        document.body.classList.add('model-loading');
+        modelStatus.textContent = 'Loading...';
+        loadModelBtn.disabled = true;
+        
+        try {
+            const result = await embryoClassifier.initialize('modelStatus');
+            
+            if (result) {
+                document.body.classList.remove('model-loading');
+                document.body.classList.add('model-loaded');
+                modelStatus.textContent = 'Ready';
+                isModelLoaded = true;
+                showAiPrediction();
+            } else {
+                throw new Error('Model initialization failed');
+            }
+        } catch (error) {
+            document.body.classList.remove('model-loading');
+            document.body.classList.add('model-error');
+            modelStatus.textContent = 'Error: ' + error.message;
+            loadModelBtn.disabled = false;
+        }
     }
     
     // Prevent default behaviors for drag events
@@ -116,6 +157,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         currentFile = file;
         displayImagePreview(file);
+        
+        // Reset AI prediction when new image is uploaded
+        resetPrediction();
     }
     
     // Display image preview
@@ -126,6 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
             previewImage.src = e.target.result;
             showUploadedImage();
             enableAnalyzeButton();
+            
+            // If model is loaded, automatically classify the image
+            if (isModelLoaded) {
+                predictionStatus.textContent = 'Ready to analyze. Click "Analyze Embryo" to begin.';
+            }
         };
         
         reader.readAsDataURL(file);
@@ -145,6 +194,18 @@ document.addEventListener('DOMContentLoaded', function() {
         fileUpload.value = '';
         currentFile = null;
         disableAnalyzeButton();
+        resetPrediction();
+    }
+    
+    // Reset AI prediction display
+    function resetPrediction() {
+        predictionStatus.textContent = 'Upload an image and click "Analyze Embryo"';
+        predictionClass.textContent = '-';
+        predictionConfidence.textContent = '-';
+        allScoresContainer.innerHTML = '';
+        
+        // Remove any success/error classes
+        document.body.classList.remove('prediction-success', 'prediction-error');
     }
     
     // Enable the analyze button
@@ -175,8 +236,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     }
     
-    // Analyze the image (simulated for now)
-    function analyzeImage() {
+    // Hide AI prediction
+    function hideAiPrediction() {
+        aiPredictionContainer.classList.remove('active');
+    }
+    
+    // Show AI prediction
+    function showAiPrediction() {
+        aiPredictionContainer.classList.add('active');
+    }
+    
+    // Analyze the image
+    async function analyzeImage() {
         if (!currentFile || isAnalyzing) return;
         
         isAnalyzing = true;
@@ -185,21 +256,145 @@ document.addEventListener('DOMContentLoaded', function() {
         // Copy the image to the results section
         analyzedImage.src = previewImage.src;
         
-        // Simulate analysis time (3 seconds)
-        setTimeout(() => {
-            // Generate simulated results
-            generateSimulatedResults();
+        // Try to use the AI model if loaded
+        if (isModelLoaded) {
+            await runAiModelInference();
+        }
+        
+        // Generate simulated results for the demo visualization
+        generateSimulatedResults();
+        
+        // Draw annotation overlay
+        drawAnnotationOverlay();
+        
+        // Show results
+        showResults();
+        
+        // Reset analyze button state
+        analyzeBtn.classList.remove('loading');
+        isAnalyzing = false;
+    }
+    
+    // Run AI model inference
+    async function runAiModelInference() {
+        try {
+            predictionStatus.textContent = 'Running AI analysis...';
             
-            // Draw annotation overlay
-            drawAnnotationOverlay();
+            // Create a new image element for classification
+            const img = new Image();
+            img.src = previewImage.src;
             
-            // Show results
-            showResults();
+            await new Promise((resolve) => {
+                img.onload = resolve;
+            });
             
-            // Reset analyze button state
-            analyzeBtn.classList.remove('loading');
-            isAnalyzing = false;
-        }, 3000);
+            // Classify the image
+            const result = await embryoClassifier.classifyImage(img);
+            
+            if (result) {
+                // Update prediction display
+                predictionClass.textContent = result.className;
+                predictionConfidence.textContent = result.confidence + '%';
+                predictionStatus.textContent = 'Analysis complete!';
+                
+                // Add success class
+                document.body.classList.add('prediction-success');
+                document.body.classList.remove('prediction-error');
+                
+                // Display all scores
+                displayAllScores(result);
+                
+                // Adjust the visual results to match the AI prediction
+                adjustVisualResultsToMatch(result);
+            }
+        } catch (error) {
+            console.error('AI analysis error:', error);
+            predictionStatus.textContent = 'Error analyzing image: ' + error.message;
+            document.body.classList.add('prediction-error');
+            document.body.classList.remove('prediction-success');
+        }
+    }
+    
+    // Display all class scores
+    function displayAllScores(result) {
+        allScoresContainer.innerHTML = '';
+        
+        // Get the scores and class names
+        const scores = result.allScores;
+        const classNames = result.classNames;
+        const bestClass = result.className;
+        
+        // Create a score item for each class
+        Object.keys(classNames).forEach(classId => {
+            const className = classNames[classId];
+            const score = parseFloat(scores[classId - 1]); // Adjust for zero-based array
+            
+            const scoreItem = document.createElement('div');
+            scoreItem.className = 'score-item';
+            
+            // If this is the best class, add the 'best' class
+            if (className === bestClass) {
+                scoreItem.classList.add('best');
+            }
+            
+            scoreItem.innerHTML = `
+                <span class="class-name">${className}</span>
+                <div class="score-bar-container">
+                    <div class="score-bar" style="width: ${score}%"></div>
+                </div>
+                <span class="score-value">${score}%</span>
+            `;
+            
+            allScoresContainer.appendChild(scoreItem);
+        });
+    }
+    
+    // Adjust visual results to match AI prediction
+    function adjustVisualResultsToMatch(result) {
+        const className = result.className;
+        
+        // Map embryo class to visual characteristics
+        switch(className) {
+            case '2cell':
+                qualityScore.textContent = 'C';
+                implantationProbability.textContent = '15%';
+                probabilityBar.style.width = '15%';
+                document.getElementById('cellNumberRating').textContent = '2';
+                cellNumberBar.style.width = '15%';
+                break;
+                
+            case '4cell':
+                qualityScore.textContent = 'B';
+                implantationProbability.textContent = '35%';
+                probabilityBar.style.width = '35%';
+                document.getElementById('cellNumberRating').textContent = '4';
+                cellNumberBar.style.width = '25%';
+                break;
+                
+            case '8cell':
+                qualityScore.textContent = 'B+';
+                implantationProbability.textContent = '45%';
+                probabilityBar.style.width = '45%';
+                document.getElementById('cellNumberRating').textContent = '8';
+                cellNumberBar.style.width = '50%';
+                break;
+                
+            case 'morula':
+                qualityScore.textContent = 'B';
+                implantationProbability.textContent = '50%';
+                probabilityBar.style.width = '50%';
+                document.getElementById('cellNumberRating').textContent = '16-32';
+                cellNumberBar.style.width = '70%';
+                break;
+                
+            case 'blastocyst':
+                qualityScore.textContent = 'A';
+                implantationProbability.textContent = '68%';
+                probabilityBar.style.width = '68%';
+                document.getElementById('cellNumberRating').textContent = '70-100';
+                cellNumberBar.style.width = '90%';
+                break;
+        }
     }
     
     // Generate simulated results based on random data
@@ -220,16 +415,19 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'D': probability = randomRange(10, 25); break;
         }
         
-        // Display results
-        qualityScore.textContent = grade;
-        implantationProbability.textContent = `${probability}%`;
-        probabilityBar.style.width = `${probability}%`;
+        // Display results if AI model not used
+        if (!isModelLoaded) {
+            qualityScore.textContent = grade;
+            implantationProbability.textContent = `${probability}%`;
+            probabilityBar.style.width = `${probability}%`;
+            
+            // Detail ratings
+            const cellNumber = Math.floor(randomRange(4, 16));
+            document.getElementById('cellNumberRating').textContent = cellNumber;
+            cellNumberBar.style.width = `${(cellNumber / 16) * 100}%`;
+        }
         
-        // Detail ratings
-        const cellNumber = Math.floor(randomRange(4, 16));
-        document.getElementById('cellNumberRating').textContent = cellNumber;
-        cellNumberBar.style.width = `${(cellNumber / 16) * 100}%`;
-        
+        // These always get randomized for demo
         const symmetry = (Math.round(randomRange(3.0, 5.0) * 10) / 10).toFixed(1);
         document.getElementById('symmetryRating').textContent = symmetry;
         symmetryBar.style.width = `${(symmetry / 5) * 100}%`;

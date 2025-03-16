@@ -637,4 +637,159 @@ input:checked + .slider:before {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Model Status */
+.model-status-container {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    width: 100%;
+    text-align: center;
+}
+
+.model-status-text {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+#modelStatus {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+#loadModelBtn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+}
+
+/* AI Prediction Section */
+.ai-prediction {
+    padding: 30px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    display: none;
+}
+
+.ai-prediction.active {
+    display: block;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.ai-prediction h3 {
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    color: var(--dark-color);
+    text-align: center;
+}
+
+.prediction-result {
+    background: var(--tertiary-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+}
+
+.prediction-status {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.prediction-details {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.prediction-class, .prediction-confidence {
+    text-align: center;
+}
+
+.prediction-class .label, .prediction-confidence .label {
+    display: block;
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.prediction-class .value, .prediction-confidence .value {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.all-scores-container {
+    margin-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 15px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.score-item .class-name {
+    font-weight: 500;
+}
+
+.score-item .score-bar-container {
+    width: 60%;
+    height: 8px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 10px;
+}
+
+.score-item .score-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+.score-item .score-value {
+    width: 50px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.score-item.best {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.score-item.best .score-bar {
+    background: var(--primary-color);
+}
+
+/* Model loading and prediction states */
+.model-loading #modelStatus {
+    color: var(--warning-color);
+}
+
+.model-loaded #modelStatus {
+    color: var(--success-color);
+}
+
+.model-error #modelStatus {
+    color: var(--error-color);
+}
+
+.prediction-error .prediction-status {
+    color: var(--error-color);
+}
+
+.prediction-success .prediction-status {
+    color: var(--success-color);
 } 

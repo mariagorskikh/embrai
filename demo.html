@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="demo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ONNX Runtime Web for AI model inference -->
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 </head>
 <body>
     <!-- Preloader -->
@@ -73,6 +75,10 @@
                             <input type="file" id="fileUpload" accept="image/*" hidden>
                             <button class="button primary" id="browseTrigger">Browse Files</button>
                             <p class="sample-image-link">No embryo image? <a href="assets/sample-embryo.svg" download="sample-embryo.svg">Download a sample</a></p>
+                            <div class="model-status-container">
+                                <p class="model-status-text">AI Model: <span id="modelStatus">Not loaded</span></p>
+                                <button class="button secondary" id="loadModelBtn">Load AI Model</button>
+                            </div>
                         </div>
                         <div class="uploaded-image" id="uploadedImage">
                             <img id="previewImage" src="" alt="Uploaded embryo image">
@@ -90,6 +96,29 @@
                     <div class="analyze-info">
                         <p><i class="fas fa-shield-alt"></i> Your image is processed locally and securely</p>
                         <p><i class="fas fa-bolt"></i> Analysis typically takes 5-10 seconds</p>
+                    </div>
+                </div>
+                
+                <!-- AI Model Prediction Result -->
+                <div class="ai-prediction" id="aiPredictionContainer">
+                    <h3>AI Model Prediction</h3>
+                    <div class="prediction-result">
+                        <div class="prediction-status" id="predictionStatus">
+                            Ready to analyze your embryo image
+                        </div>
+                        <div class="prediction-details" id="predictionDetails">
+                            <div class="prediction-class">
+                                <span class="label">Embryo Stage:</span>
+                                <span class="value" id="predictionClass">-</span>
+                            </div>
+                            <div class="prediction-confidence">
+                                <span class="label">Confidence:</span>
+                                <span class="value" id="predictionConfidence">-</span>
+                            </div>
+                        </div>
+                        <div class="all-scores-container" id="allScoresContainer">
+                            <!-- Will be populated with all class scores -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -326,6 +355,7 @@
 
     <script src="script.js"></script>
     <script src="animations.js"></script>
+    <script src="model-handler.js"></script>
     <script src="demo.js"></script>
 </body>
 </html> 
