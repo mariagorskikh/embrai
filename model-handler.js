@@ -15,12 +15,35 @@ class EmbryoClassifier {
         
         this.isLoading = true;
         this.statusElement = document.getElementById(statusElementId);
+        this.updateStatus('Initializing ONNX Runtime...');
+        
+        // Check if ONNX runtime is available
+        if (typeof ort === 'undefined') {
+            const errorMsg = 'ONNX Runtime not found. Please check your browser support and network connection.';
+            console.error(errorMsg);
+            this.updateStatus(`Error: ${errorMsg}`);
+            this.isLoading = false;
+            return false;
+        }
+        
         this.updateStatus('Loading model metadata...');
 
         try {
+            // Get base URL to ensure correct paths regardless of deployment
+            const baseUrl = window.location.origin;
+            
+            // Log the expected paths for debugging
+            console.log('Model metadata path:', `${baseUrl}/assets/model/model_metadata.json`);
+            console.log('ONNX model path:', `${baseUrl}/assets/model/embryo_model.onnx`);
+            
             // Load model metadata
-            const metadataResponse = await fetch('/assets/model/model_metadata.json');
+            const metadataResponse = await fetch(`${baseUrl}/assets/model/model_metadata.json`);
+            if (!metadataResponse.ok) {
+                throw new Error(`Failed to fetch metadata: ${metadataResponse.status} ${metadataResponse.statusText}`);
+            }
+            
             this.metadata = await metadataResponse.json();
+            console.log('Metadata loaded successfully:', this.metadata);
             
             this.updateStatus('Loading ONNX model... (this may take a moment)');
             
@@ -30,7 +53,8 @@ class EmbryoClassifier {
                 graphOptimizationLevel: 'all'
             };
             
-            this.session = await ort.InferenceSession.create('/assets/model/embryo_model.onnx', sessionOptions);
+            this.session = await ort.InferenceSession.create(`${baseUrl}/assets/model/embryo_model.onnx`, sessionOptions);
+            console.log('ONNX model loaded successfully');
             
             this.isModelLoaded = true;
             this.isLoading = false;
@@ -70,17 +94,20 @@ class EmbryoClassifier {
             
             // Get output
             const output = results.output;
-            const scores = Array.from(output.data);
+            const rawScores = Array.from(output.data);
+            
+            // Apply softmax to normalize scores to probabilities
+            const normalizedScores = this.softmax(rawScores);
             
             // Find max score index
-            const maxScore = Math.max(...scores);
-            const maxIndex = scores.indexOf(maxScore);
+            const maxScore = Math.max(...normalizedScores);
+            const maxIndex = normalizedScores.indexOf(maxScore);
             
             // Add 1 to match the class indices in metadata (they start from 1)
             const classId = maxIndex + 1;
             const className = this.metadata.class_names[classId];
             
-            // Format confidence as percentage
+            // Format confidence as percentage (now properly between 0-100%)
             const confidence = (maxScore * 100).toFixed(2);
             
             this.updateStatus('Classification complete');
@@ -88,7 +115,7 @@ class EmbryoClassifier {
             return {
                 className: className,
                 confidence: confidence,
-                allScores: scores.map(s => (s * 100).toFixed(2)),
+                allScores: normalizedScores.map(s => (s * 100).toFixed(2)),
                 classNames: this.metadata.class_names
             };
         } catch (error) {
@@ -96,6 +123,15 @@ class EmbryoClassifier {
             this.updateStatus(`Error during classification: ${error.message}`);
             return null;
         }
+    }
+
+    // Softmax function to normalize scores to probabilities (0-1)
+    softmax(scores) {
+        // For numerical stability, subtract the maximum value
+        const maxScore = Math.max(...scores);
+        const exps = scores.map(s => Math.exp(s - maxScore));
+        const sumExps = exps.reduce((acc, val) => acc + val, 0);
+        return exps.map(exp => exp / sumExps);
     }
 
     async preprocessImage(imageElement) {

@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const predictionConfidence = document.getElementById('predictionConfidence');
     const allScoresContainer = document.getElementById('allScoresContainer');
     
+    // Help elements
+    const helpBtn = document.getElementById('helpBtn');
+    const testingInstructions = document.getElementById('testingInstructions');
+    
     let currentFile = null;
     let isAnalyzing = false;
     let isModelLoaded = false;
@@ -76,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // AI Model loading
         loadModelBtn.addEventListener('click', initializeModel);
+        
+        // Help button
+        helpBtn.addEventListener('click', toggleHelpInstructions);
     }
     
     // Initialize the AI model
@@ -85,8 +92,12 @@ document.addEventListener('DOMContentLoaded', function() {
         modelStatus.textContent = 'Loading...';
         loadModelBtn.disabled = true;
         
+        console.log('Starting model initialization...');
+        
         try {
+            console.log('Calling embryoClassifier.initialize()...');
             const result = await embryoClassifier.initialize('modelStatus');
+            console.log('Initialize result:', result);
             
             if (result) {
                 document.body.classList.remove('model-loading');
@@ -94,10 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 modelStatus.textContent = 'Ready';
                 isModelLoaded = true;
                 showAiPrediction();
+                console.log('Model successfully loaded and initialized');
             } else {
                 throw new Error('Model initialization failed');
             }
         } catch (error) {
+            console.error('Detailed model initialization error:', error);
             document.body.classList.remove('model-loading');
             document.body.classList.add('model-error');
             modelStatus.textContent = 'Error: ' + error.message;
@@ -278,18 +291,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run AI model inference
     async function runAiModelInference() {
         try {
+            console.log('Starting AI model inference...');
             predictionStatus.textContent = 'Running AI analysis...';
             
             // Create a new image element for classification
             const img = new Image();
             img.src = previewImage.src;
+            console.log('Image source loaded:', img.src.substring(0, 50) + '...');
             
             await new Promise((resolve) => {
-                img.onload = resolve;
+                img.onload = () => {
+                    console.log('Image loaded successfully. Size:', img.width, 'x', img.height);
+                    resolve();
+                };
+                img.onerror = (err) => {
+                    console.error('Error loading image:', err);
+                    resolve();
+                };
             });
             
+            console.log('Calling embryoClassifier.classifyImage()...');
             // Classify the image
             const result = await embryoClassifier.classifyImage(img);
+            console.log('Classification result:', result);
             
             if (result) {
                 // Update prediction display
@@ -302,13 +326,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.remove('prediction-error');
                 
                 // Display all scores
+                console.log('Displaying all scores...');
                 displayAllScores(result);
                 
                 // Adjust the visual results to match the AI prediction
                 adjustVisualResultsToMatch(result);
+                console.log('AI analysis complete, UI updated');
+            } else {
+                throw new Error('Classification result is empty');
             }
         } catch (error) {
-            console.error('AI analysis error:', error);
+            console.error('Detailed AI analysis error:', error);
             predictionStatus.textContent = 'Error analyzing image: ' + error.message;
             document.body.classList.add('prediction-error');
             document.body.classList.remove('prediction-success');
@@ -329,6 +357,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const className = classNames[classId];
             const score = parseFloat(scores[classId - 1]); // Adjust for zero-based array
             
+            // Ensure score is between 0-100 for display purposes
+            const displayScore = Math.max(0, Math.min(100, score)).toFixed(1);
+            
             const scoreItem = document.createElement('div');
             scoreItem.className = 'score-item';
             
@@ -340,13 +371,17 @@ document.addEventListener('DOMContentLoaded', function() {
             scoreItem.innerHTML = `
                 <span class="class-name">${className}</span>
                 <div class="score-bar-container">
-                    <div class="score-bar" style="width: ${score}%"></div>
+                    <div class="score-bar" style="width: ${displayScore}%"></div>
                 </div>
-                <span class="score-value">${score}%</span>
+                <span class="score-value">${displayScore}%</span>
             `;
             
             allScoresContainer.appendChild(scoreItem);
         });
+        
+        // Log the sum of all scores to verify normalization (should be close to 100%)
+        const totalConfidence = scores.reduce((sum, score) => sum + parseFloat(score), 0).toFixed(1);
+        console.log(`Total confidence across all classes: ${totalConfidence}%`);
     }
     
     // Adjust visual results to match AI prediction
@@ -568,6 +603,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Utility function for random range
     function randomRange(min, max) {
         return min + Math.random() * (max - min);
+    }
+    
+    // Toggle help instructions
+    function toggleHelpInstructions() {
+        console.log('Toggling help instructions');
+        if (testingInstructions.style.display === 'none' || !testingInstructions.style.display) {
+            testingInstructions.style.display = 'block';
+        } else {
+            testingInstructions.style.display = 'none';
+        }
     }
     
     // Initialize the demo
