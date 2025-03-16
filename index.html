@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmbrAI - AI-Powered Embryo Selection for IVF</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Mouse Tracking Overlay -->
+    <div class="mouse-tracking-overlay">
+        <div class="cursor-effect"></div>
+    </div>
+
     <header>
         <div class="container">
             <div class="logo">
@@ -34,9 +45,17 @@
     </header>
 
     <section class="hero">
+        <!-- Parallax Background Elements -->
+        <div class="parallax-bg">
+            <div class="parallax-circle circle1" data-speed="0.1"></div>
+            <div class="parallax-circle circle2" data-speed="0.05"></div>
+            <div class="parallax-circle circle3" data-speed="0.15"></div>
+            <div class="dynamic-grid"></div>
+        </div>
+
         <div class="container">
             <div class="hero-content">
-                <h1>Revolutionizing <span class="highlight">Embryo Selection</span> in IVF</h1>
+                <h1>Revolutionizing <span class="highlight typing-effect">Embryo Selection</span> in IVF</h1>
                 <p>Enhancing success rates through AI-powered analysis while ensuring complete patient data privacy with federated learning technology.</p>
                 <div class="hero-buttons">
                     <a href="#contact" class="button primary">Get Started</a>
@@ -45,9 +64,14 @@
             </div>
             <div class="hero-image">
                 <div class="image-container">
-                    <img src="assets/embryo-ai.svg" alt="AI-powered embryo analysis">
+                    <img src="assets/embryo-ai.svg" alt="AI-powered embryo analysis" class="svg-animate">
                 </div>
             </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
@@ -60,17 +84,17 @@
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-percentage"></i></div>
-                    <h3>15-20%</h3>
+                    <h3 class="counter" data-target="20">0</h3>
                     <p>Potential increase in successful implantation rates</p>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>100%</h3>
+                    <h3 class="counter" data-target="100">0</h3>
                     <p>Privacy compliant with HIPAA & GDPR standards</p>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-microscope"></i></div>
-                    <h3>6+</h3>
+                    <h3 class="counter" data-target="6">0</h3>
                     <p>Morphological factors analyzed by our AI</p>
                 </div>
             </div>
@@ -78,6 +102,10 @@
     </section>
 
     <section id="technology" class="technology">
+        <div class="parallax-bg">
+            <div class="parallax-circle circle1" data-speed="0.1"></div>
+            <div class="parallax-circle circle2" data-speed="0.05"></div>
+        </div>
         <div class="container">
             <div class="section-header">
                 <h2>Our Technology</h2>
@@ -117,6 +145,9 @@
     </section>
 
     <section id="benefits" class="benefits">
+        <div class="parallax-bg">
+            <div class="parallax-circle circle3" data-speed="0.15"></div>
+        </div>
         <div class="container">
             <div class="section-header">
                 <h2>Benefits</h2>
@@ -154,7 +185,7 @@
                     </div>
                 </div>
                 <div class="benefits-image">
-                    <img src="assets/embryo-selection.svg" alt="EmbrAI embryo selection process">
+                    <img src="assets/embryo-selection.svg" alt="EmbrAI embryo selection process" class="svg-animate">
                 </div>
             </div>
         </div>
@@ -204,12 +235,19 @@
             <div class="cta-content">
                 <h2>Ready to enhance your embryo selection process?</h2>
                 <p>Join leading fertility clinics already benefiting from EmbrAI's technology.</p>
-                <a href="#contact" class="button primary">Schedule a Demo</a>
+                <a href="#contact" class="button primary">
+                    <span class="loading-spinner"></span>
+                    Schedule a Demo
+                </a>
             </div>
         </div>
     </section>
 
     <section id="contact" class="contact">
+        <div class="parallax-bg">
+            <div class="parallax-circle circle2" data-speed="0.05"></div>
+            <div class="parallax-circle circle3" data-speed="0.15"></div>
+        </div>
         <div class="container">
             <div class="section-header">
                 <h2>Contact Us</h2>
@@ -234,7 +272,10 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" rows="4" required></textarea>
                         </div>
-                        <button type="submit" class="button primary">Send Message</button>
+                        <button type="submit" class="button primary">
+                            <span class="loading-spinner"></span>
+                            Send Message
+                        </button>
                     </form>
                 </div>
                 <div class="contact-info">
@@ -261,6 +302,7 @@
     </section>
 
     <footer>
+        <div id="particles-container"></div>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
@@ -304,5 +346,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="animations.js"></script>
 </body>
 </html> 

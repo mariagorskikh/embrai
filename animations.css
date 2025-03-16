@@ -1,0 +1,405 @@
+/* Advanced Animations for EmbrAI Landing Page */
+
+/* Fade In Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Floating Animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Spin Animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Breathing Glow Animation */
+@keyframes breathe {
+  0% { filter: drop-shadow(0 0 2px rgba(46, 125, 209, 0.3)); }
+  50% { filter: drop-shadow(0 0 10px rgba(46, 125, 209, 0.6)); }
+  100% { filter: drop-shadow(0 0 2px rgba(46, 125, 209, 0.3)); }
+}
+
+/* Wave Animation */
+@keyframes wave {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+/* Apply Animations to Elements */
+
+/* Hero Section Animations */
+.hero-content h1 {
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero-content p {
+  animation: fadeInDown 1s ease-out 0.3s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.hero-buttons {
+  animation: fadeIn 1s ease-out 0.6s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.hero-image {
+  animation: fadeIn 1.2s ease-out;
+}
+
+.image-container img {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Floating Elements */
+.tech-icon i, .stat-icon i, .benefit-icon i {
+  animation: float 5s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Staggered Card Animations */
+.stat-card:nth-child(1) {
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.stat-card:nth-child(2) {
+  animation: fadeInUp 0.6s ease-out 0.4s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.stat-card:nth-child(3) {
+  animation: fadeInUp 0.6s ease-out 0.6s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.tech-card {
+  opacity: 0;
+}
+
+.tech-card.animate {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 1;
+}
+
+/* Benefits Animation */
+.benefit-item {
+  opacity: 0;
+}
+
+.benefit-item.animate {
+  animation: fadeInLeft 0.6s ease-out forwards;
+  opacity: 1;
+}
+
+.benefits-image img {
+  animation: pulse 10s ease-in-out infinite;
+}
+
+/* Steps Animation */
+.step {
+  opacity: 0;
+}
+
+.step.animate {
+  animation: fadeInRight 0.6s ease-out forwards;
+  opacity: 1;
+}
+
+.step-number {
+  position: relative;
+}
+
+.step-number::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  animation: breathe 3s infinite ease-in-out;
+  z-index: -1;
+}
+
+/* CTA Pulse */
+.cta .button.primary {
+  animation: pulse 3s infinite ease-in-out;
+}
+
+/* Form animation */
+.form-group {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+  animation-delay: calc(0.1s * var(--animation-order));
+}
+
+.form-group:nth-child(1) { --animation-order: 1; }
+.form-group:nth-child(2) { --animation-order: 2; }
+.form-group:nth-child(3) { --animation-order: 3; }
+.form-group:nth-child(4) { --animation-order: 4; }
+
+/* Contact animation */
+.info-item {
+  opacity: 0;
+  animation: fadeInRight 0.6s ease-out forwards;
+  animation-delay: calc(0.1s * var(--animation-order));
+}
+
+.info-item:nth-child(1) { --animation-order: 1; }
+.info-item:nth-child(2) { --animation-order: 2; }
+.info-item:nth-child(3) { --animation-order: 3; }
+
+/* Background animated gradient */
+.cta {
+  background-size: 200% 200%;
+  animation: gradientMove 15s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Header scroll animation */
+header.scrolled {
+  animation: fadeInDown 0.3s forwards;
+}
+
+/* Scroll indicator animation */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fadeInUp 1s ease-out 1.5s forwards, bounceDown 2s infinite ease-in-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.scroll-indicator i {
+  font-size: 24px;
+  color: var(--primary-color);
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* Mouse position tracking overlay effect */
+.mouse-tracking-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-effect {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(46, 125, 209, 0.15) 0%, 
+    rgba(127, 43, 232, 0.05) 40%, 
+    transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+/* Parallax scrolling effects */
+.parallax-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.05;
+}
+
+.parallax-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--primary-color);
+  opacity: 0.1;
+}
+
+.circle1 {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: 10%;
+}
+
+.circle2 {
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  right: 10%;
+}
+
+.circle3 {
+  width: 150px;
+  height: 150px;
+  bottom: 20%;
+  left: 30%;
+  background: var(--secondary-color);
+}
+
+/* Dynamic grid animation */
+.dynamic-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.05;
+  background-image: 
+    linear-gradient(rgba(46, 125, 209, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 125, 209, 0.2) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Typing effect for headings */
+.typing-effect::after {
+  content: '|';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Page transitions */
+.fade-transition {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* SVG path animations */
+.svg-animate path {
+  animation: drawPath 2s forwards;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Loading spinner for form submission */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+  display: none;
+}
+
+.button.loading .loading-spinner {
+  display: inline-block;
+}
+
+/* Add animation to scrollbar */
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Particle effect for header and footer */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  pointer-events: none;
+  opacity: 0.5;
+} 
