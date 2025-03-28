@@ -12,7 +12,7 @@ import shutil
 
 # URLs for model files (replace with your actual hosted URLs)
 MODEL_URLS = {
-    "vit_model.onnx": "https://storage.googleapis.com/embrai-models/vit_model.onnx",
+    "embryo_model.onnx": "https://storage.googleapis.com/embrai-models/embryo_model.onnx",
     # Add other model files as needed
 }
 

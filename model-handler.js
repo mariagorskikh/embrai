@@ -34,7 +34,7 @@ class EmbryoClassifier {
             
             // Log the expected paths for debugging
             console.log('Model metadata path:', `${baseUrl}/assets/model/model_metadata.json`);
-            console.log('ONNX model path:', `${baseUrl}/assets/model/vit_model.onnx`);
+            console.log('ONNX model path:', `${baseUrl}/assets/model/embryo_model.onnx`);
             
             // Load model metadata
             const metadataResponse = await fetch(`${baseUrl}/assets/model/model_metadata.json`);
@@ -55,7 +55,7 @@ class EmbryoClassifier {
             
             // Test if the model file can be fetched
             try {
-                const modelTestResponse = await fetch(`${baseUrl}/assets/model/vit_model.onnx`, { method: 'HEAD' });
+                const modelTestResponse = await fetch(`${baseUrl}/assets/model/embryo_model.onnx`, { method: 'HEAD' });
                 if (!modelTestResponse.ok) {
                     throw new Error(`Model file not found. Please run 'python download_models.py' to download the required models.`);
                 }
@@ -66,7 +66,7 @@ class EmbryoClassifier {
                 return false;
             }
             
-            this.session = await ort.InferenceSession.create(`${baseUrl}/assets/model/vit_model.onnx`, sessionOptions);
+            this.session = await ort.InferenceSession.create(`${baseUrl}/assets/model/embryo_model.onnx`, sessionOptions);
             console.log('ONNX model loaded successfully');
             
             // Log model input/output information

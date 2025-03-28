@@ -1,6 +1,6 @@
 # Large model files
-assets/model/vit_model.onnx
 assets/model/embryo_model.onnx
+assets/model/vit_model.onnx
 vit_best_v1.pth
 *.pth
 *.onnx
